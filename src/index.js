@@ -35,7 +35,13 @@ const getReplacements = (configOptions) => {
   if (typeof configOptions === "object") { return configOptions; }
 
   try {
-    const fullPath = path.join(process.cwd(), configOptions);
+    let cwd = process.cwd();
+
+    if (cwd.match(/node_modules\/react-native\/packager$/)) {
+      cwd += '/../../../'
+    }
+
+    const fullPath = path.join(cwd, configOptions);
     fs.accessSync(fullPath, fs.F_OK);
     return require(fullPath);
   } catch (err) {
